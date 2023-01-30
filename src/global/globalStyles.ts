@@ -13,6 +13,9 @@ export const GlobalStyle = createGlobalStyle`
     --gray-300: #F2F2F2;
     --gray-900: #706E8F;
 
+    --red-700: rgb(214, 35, 0);
+    --brown-700: rgb(80, 35, 20);
+
     --black-700: #1F1F1F;
   }
 

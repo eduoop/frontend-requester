@@ -1,9 +1,12 @@
 import axios from "axios";
-import { api } from "../config/api";
+
+const api = axios.create({
+  baseURL: "http://127.0.0.1:3333",
+});
 
 export const useApi = () => ({
   validate: async (token: string) => {
-    const response = await api.get("/auth", {
+    const response = await api.get("/auth/validate", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -14,8 +17,12 @@ export const useApi = () => ({
     const response = await api.post("/auth", { email, password });
     return response.data;
   },
-  logout: async () => {
-   const response = await api.post("/auth");
+  logout: async (token: string | null) => {
+    const response = await api.delete("/auth", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
     return response.data;
   },
 });
