@@ -18,8 +18,17 @@ export const Create = ({ email, setEmail, setStage }: Props) => {
 
   const [loading, setLoading] = useState(false)
 
+  const [invEmail, setInvEmail] = useState(false)
+
   const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if(!email.trim()) {
+      setInvEmail(true)
+    } else {
+      setInvEmail(false)
+    }
+
     if (email.trim()) {
       setLoading(true)
       api.post('/users/register', {
@@ -44,7 +53,7 @@ export const Create = ({ email, setEmail, setStage }: Props) => {
     <Logincard onSubmit={(e) => sendEmail(e)}>
       <h1 className='text-white text-2xl mb-5'>Criação de conta</h1>
       <div className='flex flex-col gap-10 w-full'>
-        <InputOutlined id='email' setValue={setEmail} type="text" value={email} placeholder="Email" />
+        <InputOutlined invalid={invEmail} setInvalid={setInvEmail} id='email' setValue={setEmail} type="text" value={email} placeholder="Email" />
         <Actions>
           <Button inLoading={loading} text='Enviar'></Button>
           <p style={{ color: "rgb(214,35,0)", marginTop: "1em", cursor: "pointer" }} onClick={() => setStage('login')}>Entrar</p>

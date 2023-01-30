@@ -1,8 +1,7 @@
-import { CompleteCreate } from '../../components/CompleteCreate'
+import { CompleteRecover } from '../../components/CompleteRecover'
 import { CardContainer, CardSide, HomeContainer, ImageSide } from './styles'
 
-export const FinishCreate = () => {
-
+export const RecoverAccount = () => {
 
     return (
         <HomeContainer>
@@ -10,7 +9,7 @@ export const FinishCreate = () => {
             <CardSide>
                 <div className='h-full w-full px-8 flex justify-center'>
                     <CardContainer>
-                        <CompleteCreate />
+                        <CompleteRecover />
                     </CardContainer>
                 </div>
             </CardSide>

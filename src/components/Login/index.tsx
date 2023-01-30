@@ -23,8 +23,24 @@ export const Login = ({ email, setEmail, password, setPassword, setStage }: Prop
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
+  const [invEmail, setInvEmail] = useState(false)
+  const [invPassword, setInvPassword] = useState(false)
+
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!email.trim()) {
+      setInvEmail(true)
+    } else {
+      setInvEmail(false)
+    }
+
+    if (!password.trim()) {
+      setInvPassword(true)
+    } else {
+      setInvPassword(false)
+    }
+
     if (email.trim() && password.trim()) {
       setLoading(true);
       const isLogged = await auth.signin(email, password)
@@ -44,8 +60,8 @@ export const Login = ({ email, setEmail, password, setPassword, setStage }: Prop
     <Logincard onSubmit={(e) => login(e)}>
       <h1 className='text-white text-2xl mb-5'>Login</h1>
       <div className='flex flex-col gap-10 w-full'>
-        <InputOutlined id='email' setValue={setEmail} type="text" value={email} placeholder="Email" />
-        <InputOutlined id='password' setValue={setPassword} type="password" value={password} placeholder="Senha" />
+        <InputOutlined invalid={invEmail} setInvalid={setInvEmail} id='email' setValue={setEmail} type="text" value={email} placeholder="Email" />
+        <InputOutlined invalid={invPassword} setInvalid={setInvPassword} id='password' setValue={setPassword} type="password" value={password} placeholder="Senha" />
         <Actions>
           <Button inLoading={loading} text='Entrar'></Button>
           <p style={{ color: "rgb(214,35,0)", marginTop: "1em", cursor: "pointer" }} onClick={() => setStage('create')}>Criar conta</p>

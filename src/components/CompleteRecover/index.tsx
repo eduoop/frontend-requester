@@ -8,7 +8,7 @@ import { api } from '../../config/api'
 import toast, { Toaster } from 'react-hot-toast';
 
 
-export const CompleteCreate = () => {
+export const CompleteRecover = () => {
 
   // Others
   const [loading, setLoading] = useState(false)
@@ -16,16 +16,11 @@ export const CompleteCreate = () => {
   const navigate = useNavigate()
 
   // Fields
-  const [email, setEmail] = useState("")
-  const [name, setName] = useState("")
-  const [phone, setPhone] = useState("")
   const [password, setPassword] = useState("")
   const [passwordConfirmation, setPasswordConfirmation] = useState("")
 
 
   // Change invalid fields
-  const [invName, setInvName] = useState(false)
-  const [invPhone, setInvPhone] = useState(false)
   const [invPassword, setInvPassword] = useState(false)
   const [invPasswordConfirmation, setInvPasswordConfirmation] = useState(false)
 
@@ -33,16 +28,6 @@ export const CompleteCreate = () => {
   const createAccount = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // set invalid fields
-    if (!name.trim()) {
-      setInvName(true)
-    } else {
-      setInvName(false)
-    }
-    if (!phone.trim()) {
-      setInvPhone(true)
-    } else {
-      setInvPhone(false)
-    }
     if (!password.trim()) {
       setInvPassword(true)
     } else {
@@ -72,17 +57,15 @@ export const CompleteCreate = () => {
       }
     }
 
-    if (name && password && phone && passwordConfirmation && passwordConfirmation === password) {
+    if (password && passwordConfirmation && passwordConfirmation === password) {
       setLoading(true)
-      api.put(`/users/register`, {
+      api.put(`/users/forgot-password`, {
         key: key,
-        name: name,
-        phone: phone,
         password: password,
         passwordConfirmation: passwordConfirmation,
       })
         .then(() => {
-          toast.success("Conta criada com sucesso!")
+          toast.success("Senha alterada com sucesso!")
           navigate("/")
         })
         .catch((err) => {
@@ -92,18 +75,12 @@ export const CompleteCreate = () => {
   }
 
   // Effects
-  useEffect(() => {
-    api.get(`/users/register/${key}`).then((res) => setEmail(res.data.email))
-  }, [key])
 
   return (
     <Logincard onSubmit={(e) => createAccount(e)}>
-      <h1 className='text-white text-2xl mb-5'>Criação de conta</h1>
+      <h1 className='text-white text-2xl mb-5'>Recuparar conta</h1>
       <div className='flex flex-col gap-10 w-full'>
-        <InputOutlined id='email' setValue={setEmail} type="text" value={email} placeholder="Email" disabled={true} />
-        <InputOutlined invalid={invName} setInvalid={setInvName} id='name' setValue={setName} type="text" value={name} placeholder="Nome" />
-        <InputOutlined invalid={invPhone} setInvalid={setInvPhone} id='phone' setValue={setPhone} type="text" value={phone} placeholder="Telefone" mask='(99) 99999-9999' />
-        <InputOutlined invalid={invPassword} setInvalid={setInvPassword} id='password' setValue={setPassword} type="password" value={password} placeholder="Senha" />
+        <InputOutlined invalid={invPassword} setInvalid={setInvPassword} id='password' setValue={setPassword} type="password" value={password} placeholder="Nova senha" />
         <InputOutlined invalid={invPasswordConfirmation} setInvalid={setInvPasswordConfirmation} id='password-confirmation' setValue={setPasswordConfirmation} type="password" value={passwordConfirmation} placeholder="Confirmar senha" />
         <Actions>
           <Button inLoading={loading} text='Enviar'></Button>
