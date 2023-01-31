@@ -56,8 +56,8 @@ export const Create = ({ email, setEmail, setStage }: Props) => {
         <InputOutlined invalid={invEmail} setInvalid={setInvEmail} id='email' setValue={setEmail} type="text" value={email} placeholder="Email" />
         <Actions>
           <Button inLoading={loading} text='Enviar'></Button>
-          <p style={{ color: "rgb(214,35,0)", marginTop: "1em", cursor: "pointer" }} onClick={() => setStage('login')}>Entrar</p>
           <p style={{ color: "rgb(214,35,0)", marginTop: "1em", cursor: "pointer" }} onClick={() => setStage('forgotPassword')}>Esqueceu sua senha?</p>
+          <p style={{ color: "rgb(214,35,0)", marginTop: "1em", cursor: "pointer" }} onClick={() => setStage('login')}>Entrar</p>
         </Actions>
       </div>
     </Logincard>

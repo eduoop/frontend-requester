@@ -17,7 +17,7 @@ export const Home = () => {
       <ImageSide />
       <CardSide>
         <h1 className='text-white font-bold text-4xl px-8 text-center mt-7 w-full'>Gerencie seus pedidos de uma forma que você nunca imaginou!</h1>
-        <div className='h-full w-full px-8 flex justify-center'>
+        <div className='w-full px-8 flex justify-center'>
           <CardContainer>
             { stage === "login" &&
               <Login setStage={setStage} email={email} setEmail={setEmail} password={password} setPassword={setPassword}/>

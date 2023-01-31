@@ -4,6 +4,7 @@ import App from './App'
 import './index.css'
 import toast, { Toaster } from 'react-hot-toast';
 import { AuthProvider } from "../src/context/auth/AuthProvider";
+import { SideBar } from './components/SideBar';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <>

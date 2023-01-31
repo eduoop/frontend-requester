@@ -50,7 +50,7 @@ export const Login = ({ email, setEmail, password, setPassword, setStage }: Prop
           setLoading(false)
         });
       if (isLogged) {
-        navigate("/travels");
+        navigate("/requests");
         setLoading(false)
       }
     }
