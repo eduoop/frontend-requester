@@ -26,8 +26,10 @@ export const SideBar = () => {
   return (
     <>
       <Navbar>
-        <NavLink className={({ isActive }) => (verifyActive(isActive))} to="/requests">Pedidos</NavLink>
-        <NavLink className={({ isActive }) => (verifyActive(isActive))} to="/snacks">Lanches</NavLink>
+        <div style={{ display: "flex", width: "90%", gap: "1em" }}>
+          <NavLink className={({ isActive }) => (verifyActive(isActive))} to="/requests">Pedidos</NavLink>
+          <NavLink className={({ isActive }) => (verifyActive(isActive))} to="/snacks">Lanches</NavLink>
+        </div>
       </Navbar>
     </>
   )
