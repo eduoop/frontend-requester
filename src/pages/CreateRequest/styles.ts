@@ -162,6 +162,10 @@ export const AddItemButton = Styled.button`
   -webkit-transition: .2s;
   transition: .2s;
 
+  &:hover {
+    opacity: .9;
+}
+
   @media (max-width: 600px) {
     padding-right: 1em;
   }
@@ -200,12 +204,43 @@ export const Line = Styled.div`
     margin-top: .5em;
 `
 
-export const ListSnacks = Styled.div `
+export const ListSnacks = Styled.div`
   display: flex;
   width: 100%;
   gap: 1em;
   flex-wrap: wrap;
 `
+
+export const AddHeader = Styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  flex-wrap: wrap;
+  margin-bottom: .5em;
+  @media (max-width: 600px) {
+    gap: 0;
+  }
+`
+
+export const Save = Styled.button`
+  padding: .1em .4em;
+  text-transform: uppercase;
+  color: var(--white-300);
+  font-weight: 600;
+  font-size: 2em;
+  text-align: center;
+  background-color: var(--red-700);
+  border-radius: 4px;
+  box-shadow: 2px 2px 8px #00000063;
+  transition: .3s;
+   &:hover {
+        opacity: .9;
+    }
+`
+
+
 
 
 

@@ -1,16 +1,21 @@
 import React, { FormEvent, useEffect, useState } from 'react'
-import { Container, MainContainer, Form, Input, InputSearch, Title, StyledSelect, AddItemContainer, AddItemButton, ContainerItems, StyledTextArea, Line, ListSnacks } from './styles'
+import { Container, MainContainer, Form, Input, InputSearch, Title, StyledSelect, AddItemContainer, AddItemButton, ContainerItems, StyledTextArea, Line, ListSnacks, AddHeader, Save } from './styles'
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { api } from '../../config/api';
 import { SnackCard } from '../../components/SnackCard';
+import { v4 as uuidv4 } from 'uuid';
+import { FilterDolarToValue } from '../../utils/FilterValueToReais';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export type Snack = {
     name: string;
     price: number;
     amount: number;
+    id: string;
 }
 
 type MySnack = {
@@ -27,6 +32,9 @@ export const CreateRequest = () => {
     const token = localStorage.getItem('authToken');
     const [mySnacks, setMySnacks] = useState<MySnack[]>([])
     const [snacks, setSnacks] = useState<Snack[]>([])
+    const navigate = useNavigate()
+
+    const [editingSnack, setEditingSnack] = useState<Snack>()
 
     const [currentSnackName, setCurrentSnackName] = useState("");
     const [value, setValue] = React.useState("");
@@ -38,6 +46,8 @@ export const CreateRequest = () => {
     const [invSnackName, setInvSnackName] = useState(false)
     const [invSnackValue, setInvSnackValue] = useState(false)
     const [invSnackTimes, setInvSnackTimes] = useState(false)
+
+    const [total, setTotal] = useState(0)
 
     const handleChange = (event: SelectChangeEvent<unknown>) => {
         setStatus(event.target.value as string);
@@ -74,21 +84,24 @@ export const CreateRequest = () => {
             setInvSnackValue(false)
         }
 
-        if (!times.trim()) {
+        if (!times.trim() || Number(times) < 1) {
             setInvSnackTimes(true)
         } else {
             setInvSnackTimes(false)
         }
 
-        if (currentSnackName && value && times) {
+        if (currentSnackName && value && times && Number(times) >= 1) {
             const newSnack = {
                 amount: Number(times),
                 name: currentSnackName,
-                price: Number(value),
+                price: valueMultiplied.includes(",") ? Number(valueMultiplied.replaceAll(",", ".")) : Number(valueMultiplied),
+                id: uuidv4(),
             }
 
             await setSnacks((oldValue) => [...oldValue, newSnack]);
+            setTotal(total + newSnack.price)
 
+            setEditingSnack(undefined)
             setValue('')
             setCurrentSnackName('')
             setTimes('')
@@ -107,6 +120,56 @@ export const CreateRequest = () => {
         if (times.trim()) {
             setInvSnackTimes(false)
         }
+
+        if (name.trim()) {
+            setInvName(false)
+        }
+    }
+
+    const createRequest = (e: FormEvent) => {
+        e.preventDefault();
+
+        if (!name.trim()) {
+            setInvName(true)
+        } else {
+            setInvName(false)
+        }
+
+        if (snacks.length < 1) {
+            setInvSnackName(true)
+            setInvSnackValue(true)
+            setInvSnackTimes(true)
+        } else {
+            setInvSnackName(false)
+            setInvSnackValue(false)
+            setInvSnackTimes(false)
+        }
+
+        if (name && snacks.length >= 1) {
+            api.post("/requests", {
+                name: name,
+                price: total,
+                status: status,
+                note: note ? note : "",
+                requestItems: snacks.map((snack) => {
+                    return {
+                        amount: snack.amount,
+                        name: snack.name,
+                        price: snack.price
+                    }
+                })
+            }, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((res) => {
+                    console.log(res.data)
+                    toast.success("Pedido craido com sucesso!")
+                    navigate("/requests")
+                })
+        }
     }
 
     useEffect(() => {
@@ -116,6 +179,7 @@ export const CreateRequest = () => {
     useEffect(() => {
         const item = mySnacks.filter(snack => snack.name === currentSnackName)[0]
         if (item) {
+            setTimes("1")
             setValue(JSON.stringify(item.price))
         }
     }, [currentSnackName])
@@ -130,20 +194,33 @@ export const CreateRequest = () => {
     }, [times])
 
     useEffect(() => {
-        if (value) {
+        if (value && !editingSnack) {
             setTimes("1")
+            setValueMultiplied(value)
+        } else {
             setValueMultiplied(value)
         }
     }, [value])
 
-    useEffect(() => verifyNullCamps(), [currentSnackName, value, times])
+    useEffect(() => verifyNullCamps(), [currentSnackName, value, times, name])
+
+    useEffect(() => {
+        if (editingSnack) {
+            setValue(JSON.stringify(editingSnack.price / editingSnack.amount))
+            setCurrentSnackName(editingSnack.name)
+            setTimes(JSON.stringify(editingSnack.amount))
+        }
+    }, [editingSnack])
 
     return (
         <Container>
             <MainContainer>
-                <Title>Criar pedido</Title>
-                <Form>
-                    <Input value={name} onChange={(e) => setName(e.target.value)} invalid={false} placeholder="Nome do cliente" />
+                <Form onSubmit={(e) => createRequest(e)}>
+                    <AddHeader>
+                        <Save>Criar pedido</Save>
+                        <Title>Total: R${FilterDolarToValue(total)}</Title>
+                    </AddHeader>
+                    <Input value={name} onChange={(e) => setName(e.target.value)} invalid={invName} placeholder="Nome do cliente" />
                     <StyledSelect
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -172,20 +249,20 @@ export const CreateRequest = () => {
                                 />
                             </div>
                             <div className='w-1/4'>
-                                <Input type="number" value={valueMultiplied} onChange={(e) => setValue(e.target.value)} invalid={invSnackValue} placeholder="Valor" />
+                                <Input type="text" value={valueMultiplied} onChange={(e) => setValue(e.target.value)} invalid={invSnackValue} placeholder="Valor" />
                             </div>
                             <div className='w-1/4'>
                                 <Input value={times} onChange={(e) => setTimes(filterNumbersString(e.target.value))} invalid={invSnackTimes} placeholder="Quantidade" />
                             </div>
                         </ContainerItems>
                         <div className={width > 600 ? 'w-1/4' : 'w-full'}>
-                            <AddItemButton type='button' onClick={(e) => addItem(e)}>Adicionar</AddItemButton>
+                            <AddItemButton type='button' onClick={(e) => addItem(e)}>{!editingSnack ? "Adicionar" : "Salvar"}</AddItemButton>
                         </div>
                     </AddItemContainer>
                     <Line />
                     <ListSnacks>
                         {snacks.map((snack, index) => (
-                            <SnackCard snack={snack} key={new Date().getDate() + new Date().getMilliseconds() + index}/>
+                            <SnackCard setEditingSnack={setEditingSnack} snack={snack} key={new Date().getDate() + new Date().getMilliseconds() + index} setSnacks={setSnacks} snacks={snacks} setTotal={setTotal} total={total} />
                         ))}
                     </ListSnacks>
                 </Form>
