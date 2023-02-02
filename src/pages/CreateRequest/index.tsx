@@ -7,7 +7,8 @@ import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { api } from '../../config/api';
 import { SnackCard } from '../../components/SnackCard';
 import { v4 as uuidv4 } from 'uuid';
-import { FilterDolarToValue } from '../../utils/FilterValueToReais';
+import { FilterBrToDolar } from '../../utils/FilterBrToDolar';
+import { FilterDolarToBr } from '../../utils/FilterDolarToBr';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -189,7 +190,12 @@ export const CreateRequest = () => {
             const newValue = Number(value) * Number(times)
             setValueMultiplied(JSON.stringify(newValue))
         } else {
-            setValueMultiplied(value)
+            if (value.includes(",")) {
+                const newValue = FilterBrToDolar(value) * Number(times)
+                setValueMultiplied(JSON.stringify(newValue))
+            } else {
+                setValueMultiplied(value)
+            }
         }
     }, [times])
 
@@ -218,7 +224,7 @@ export const CreateRequest = () => {
                 <Form onSubmit={(e) => createRequest(e)}>
                     <AddHeader>
                         <Save>Criar pedido</Save>
-                        <Title>Total: R${FilterDolarToValue(total)}</Title>
+                        <Title>Total: R${FilterDolarToBr(total)}</Title>
                     </AddHeader>
                     <Input value={name} onChange={(e) => setName(e.target.value)} invalid={invName} placeholder="Nome do cliente" />
                     <StyledSelect

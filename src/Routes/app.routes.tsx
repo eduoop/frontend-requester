@@ -1,5 +1,7 @@
 import React, { useContext } from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { RequireAuth } from '../components/RequireAuth';
+import { RequirentAuth } from '../components/RequirentAuth';
 import ScrollToTop from '../components/ScrollToTop';
 import { SideBar } from '../components/SideBar';
 import { AuthContext } from '../context/auth/AuthContext';
@@ -20,11 +22,11 @@ export const AppRoutes = () => {
         <SideBar />
       }
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/finish-create/:key' element={<FinishCreate />} />
-        <Route path='/recover-account/:key' element={<RecoverAccount />} />
-        <Route path='/requests' element={<Requests />} />
-        <Route path='/new-request' element={<CreateRequest />} />
+        <Route path='/' element={<RequirentAuth><Home /></RequirentAuth>} />
+        <Route path='/finish-create/:key' element={<RequirentAuth><FinishCreate /></RequirentAuth>} />
+        <Route path='/recover-account/:key' element={<RequirentAuth><RecoverAccount /></RequirentAuth>} />
+        <Route path='/requests' element={<RequireAuth><Requests /></RequireAuth>} />
+        <Route path='/new-request' element={<RequireAuth><CreateRequest /></RequireAuth>} />
       </Routes>
     </Router>
   )

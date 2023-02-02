@@ -2,7 +2,7 @@ import React from 'react'
 import { MdEdit } from 'react-icons/md';
 import { IoTrash } from 'react-icons/io5';
 import { Snack } from '../../pages/CreateRequest'
-import { FilterDolarToValue } from '../../utils/FilterValueToReais';
+import { FilterDolarToBr } from '../../utils/FilterDolarToBr';
 import { Actions, Amount, Card, DeleteButton, EditButton, Name, NameContainer, PriceEndAmount } from './styles';
 
 type Props = {
@@ -35,7 +35,7 @@ export const SnackCard = ({ snack, setSnacks, snacks, setEditingSnack, setTotal,
           <Amount>Quantidade: <span style={{ color: "rgb(214,35,0)" }}>{snack.amount}x</span></Amount>
         </PriceEndAmount>
         <PriceEndAmount>
-          <Amount>Total: <span style={{ color: "rgb(214,35,0)" }}>R${FilterDolarToValue(snack.price)}</span></Amount>
+          <Amount>Total: <span style={{ color: "rgb(214,35,0)" }}>R${FilterDolarToBr(snack.price)}</span></Amount>
         </PriceEndAmount>
         <Actions>
           <EditButton onClick={editSnack} type='button'>

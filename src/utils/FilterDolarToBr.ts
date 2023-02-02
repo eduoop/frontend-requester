@@ -1,4 +1,4 @@
-export const FilterDolarToValue = (value: number) => {
+export const FilterDolarToBr = (value: number) => {
     if (JSON.stringify(value).includes(",")) {
         const newValue = JSON.stringify(value).replace(",", ".")
         console.log(newValue)
