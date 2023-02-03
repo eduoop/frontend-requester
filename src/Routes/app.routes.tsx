@@ -6,6 +6,7 @@ import ScrollToTop from '../components/ScrollToTop';
 import { SideBar } from '../components/SideBar';
 import { AuthContext } from '../context/auth/AuthContext';
 import { CreateRequest } from '../pages/CreateRequest';
+import { EditRequest } from '../pages/EditRequest';
 import { FinishCreate } from '../pages/FinishCreate';
 import { Home } from '../pages/Home';
 import { RecoverAccount } from '../pages/RecoverAccount';
@@ -27,6 +28,7 @@ export const AppRoutes = () => {
         <Route path='/recover-account/:key' element={<RequirentAuth><RecoverAccount /></RequirentAuth>} />
         <Route path='/requests' element={<RequireAuth><Requests /></RequireAuth>} />
         <Route path='/new-request' element={<RequireAuth><CreateRequest /></RequireAuth>} />
+        <Route path='/edit-request/:id' element={<RequireAuth><EditRequest /></RequireAuth>} />
       </Routes>
     </Router>
   )

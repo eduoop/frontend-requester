@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FilterBrToDolar } from '../../utils/FilterBrToDolar';
 import { FilterDolarToBr } from '../../utils/FilterDolarToBr';
 import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export type Snack = {
     name: string;
@@ -24,7 +24,7 @@ type MySnack = {
     price: number;
 }
 
-export const CreateRequest = () => {
+export const EditRequest = () => {
 
     const [name, setName] = useState("")
     const { width } = useWindowDimensions();
@@ -34,6 +34,8 @@ export const CreateRequest = () => {
     const [mySnacks, setMySnacks] = useState<MySnack[]>([])
     const [snacks, setSnacks] = useState<Snack[]>([])
     const navigate = useNavigate()
+
+    const { id } = useParams()
 
     const [editingSnack, setEditingSnack] = useState<Snack>()
 
@@ -147,7 +149,8 @@ export const CreateRequest = () => {
         }
 
         if (name && snacks.length >= 1) {
-            api.post("/requests", {
+            console.log(total)
+            api.put(`/requests/${id}`, {
                 name: name,
                 price: total,
                 status: status,
@@ -167,7 +170,7 @@ export const CreateRequest = () => {
             })
                 .then((res) => {
                     console.log(res.data)
-                    toast.success("Pedido craido com sucesso!")
+                    toast.success("Pedido editado com sucesso!")
                     navigate("/requests")
                 })
         }
@@ -218,12 +221,29 @@ export const CreateRequest = () => {
         }
     }, [editingSnack])
 
+    useEffect(() => {
+        api.get(`/requests/${id}`, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((res) => {
+                setName(res.data.name)
+                setNote(res.data.note)
+                setTotal(res.data.price)
+                setStatus(res.data.status)
+                setSnacks(res.data.requestItems
+                )
+            })
+    }, [id])
+
     return (
         <Container>
             <MainContainer>
                 <Form onSubmit={(e) => createRequest(e)}>
                     <AddHeader>
-                        <Save>Criar pedido</Save>
+                        <Save>Salvar pedido</Save>
                         <Title>Total: R${FilterDolarToBr(total)}</Title>
                     </AddHeader>
                     <Input value={name} onChange={(e) => setName(e.target.value)} invalid={invName} placeholder="Nome do cliente" />

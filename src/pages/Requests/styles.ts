@@ -9,12 +9,14 @@ export const RequestsContainer = Styled.section`
     width: 100vw;
     display: flex;
     justify-content: center;
+    flex
 `
 
 export const MainContainer = Styled.div`
     width: 90%;
     margin-top: 1.5em;
     margin-bottom: 1.5em;
+    flex-direction: column;
     display: flex;
     justify-content: center;
      @media (max-width: 600px) {
@@ -48,8 +50,17 @@ export const Title = Styled.h1`
 
 export const Line = Styled.div`
     width: 100%;
-    height: 3px;
+    height: 2px;
     background-color: var(--black-700);
     margin-bottom: .5em;
+    margin-top: .5em;
+`
+
+export const ListRequests = Styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
     margin-top: .5em;
 `
