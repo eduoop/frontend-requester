@@ -17,4 +17,5 @@ export const SearchInput = Styled.input`
     outline: none;
     font-size: 1.2em;
     color: #1F1F1F;
+   
 `

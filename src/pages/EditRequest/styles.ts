@@ -48,17 +48,9 @@ export const Input = Styled.input<Props>`
         color: var(--red-700);
         border-color: var(--red-700);
     `}
-    // &:focus {
-    //     background-color: #f5f8fa08;
-    //     border-color: #f5f8fa8c;
-    // }
-    // &::placeholder {
-    //     color: #f5f8fa4a;
-    // }
-    // &:disabled {
-    //     color: #ffffff6e;
-    //     border-bottom: 2px solid #ffffff6e;
-    // }
+    &:focus {
+      background-color: #1f1f1f14;
+  }
 `
 
 export const Title = Styled.h1`
@@ -194,6 +186,9 @@ export const StyledTextArea = Styled.textarea<Props> `
         color: var(--red-700);
         border-color: var(--red-700);
     `}
+    &:focus {
+      background-color: #1f1f1f14;
+  }
 `
 
 export const Line = Styled.div`

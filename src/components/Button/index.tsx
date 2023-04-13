@@ -5,9 +5,10 @@ import { ButtonDisabled, ButtonAble } from './styles';
 type Props = {
   inLoading: boolean;
   text?: string;
+  functionExec?: () => void;
 }
 
-export const Button = ({ inLoading = false, text = 'Entrar' }: Props) => {
+export const Button = ({ functionExec, inLoading = false, text = 'Entrar' }: Props) => {
   return (
     <>
       {inLoading ?
@@ -15,7 +16,11 @@ export const Button = ({ inLoading = false, text = 'Entrar' }: Props) => {
           <img className='h-14' src={whiteLoader} />
         </ButtonDisabled>
         :
-        <ButtonAble>
+        <ButtonAble onClick={() => {
+          if (functionExec) {
+            functionExec()
+          }
+        }}>
           {text}
         </ButtonAble>
       }

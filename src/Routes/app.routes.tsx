@@ -9,8 +9,10 @@ import { CreateRequest } from '../pages/CreateRequest';
 import { EditRequest } from '../pages/EditRequest';
 import { FinishCreate } from '../pages/FinishCreate';
 import { Home } from '../pages/Home';
+import { Profile } from '../pages/Profile';
 import { RecoverAccount } from '../pages/RecoverAccount';
 import { Requests } from '../pages/Requests';
+import { Snacks } from '../pages/Snacks';
 
 export const AppRoutes = () => {
 
@@ -29,6 +31,8 @@ export const AppRoutes = () => {
         <Route path='/requests' element={<RequireAuth><Requests /></RequireAuth>} />
         <Route path='/new-request' element={<RequireAuth><CreateRequest /></RequireAuth>} />
         <Route path='/edit-request/:id' element={<RequireAuth><EditRequest /></RequireAuth>} />
+        <Route path='/snacks' element={<RequireAuth><Snacks /></RequireAuth>} />
+        <Route path='/profile' element={<RequireAuth><Profile /></RequireAuth>} />
       </Routes>
     </Router>
   )

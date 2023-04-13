@@ -2,7 +2,7 @@ import Styled from "styled-components";
 import Select from '@mui/material/Select';
 
 interface Props {
-    color: string;
+  color: string;
 }
 
 export const CardRequest = Styled.div`
@@ -14,6 +14,11 @@ export const CardRequest = Styled.div`
     align-items: center;
     position: relative;
     gap: .5em;
+    height: 120px;
+    @media (max-width: 600px) {
+      flex-direction: column;
+      height: auto;
+  }
 `
 
 export const Range = Styled.div<Props> `
@@ -33,6 +38,11 @@ export const DataContainer = Styled.div`
     justify-content: center;
     overflow: hidden;
     align-items: center;
+    width: 20%;
+    @media (max-width: 600px) {
+      width: 100%;
+      overflow: initial;
+    }
 `
 
 
@@ -157,4 +167,20 @@ export const ConfirmDelete = Styled.button`
   &:hover {
     background-color: #d9b223d1;
   }
+`
+
+export const NotePopUp = Styled.div`
+  padding: .7em;
+  width: 260px;
+  background-color: white;
+  box-shadow: 2px 2px 6px #00000040;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 6px;
+`
+
+export const NoteDescription = Styled.h1`
+  font-size: 1em;
+  font-weight: 400;
 `

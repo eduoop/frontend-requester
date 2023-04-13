@@ -48,17 +48,9 @@ export const Input = Styled.input<Props>`
         color: var(--red-700);
         border-color: var(--red-700);
     `}
-    // &:focus {
-    //     background-color: #f5f8fa08;
-    //     border-color: #f5f8fa8c;
-    // }
-    // &::placeholder {
-    //     color: #f5f8fa4a;
-    // }
-    // &:disabled {
-    //     color: #ffffff6e;
-    //     border-bottom: 2px solid #ffffff6e;
-    // }
+    &:focus {
+      background-color: #1f1f1f14;
+  }
 `
 
 export const Title = Styled.h1`
@@ -122,6 +114,7 @@ export const StyledSelect = Styled(Select)`
     font-size: 1.3em !important;
     font-weight: 500;
     font-family: Poppins !important;
+    width: 100%;
   }
 
   .MuiOutlinedInput-notchedOutline {
@@ -130,6 +123,15 @@ export const StyledSelect = Styled(Select)`
     font-weight: 500;
     font-family: Poppins !important;
     border-radius: 9px;
+    width: 100%;
+  }
+
+  .MuiInputBase-root {
+    width: 100%;
+  }
+  
+  .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+    width: 100% !important;
   }
 `
 
@@ -194,6 +196,9 @@ export const StyledTextArea = Styled.textarea<Props> `
         color: var(--red-700);
         border-color: var(--red-700);
     `}
+    &:focus {
+      background-color: #1f1f1f14;
+  }
 `
 
 export const Line = Styled.div`

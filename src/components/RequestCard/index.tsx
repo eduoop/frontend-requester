@@ -2,12 +2,14 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@m
 import React, { FormEvent, useEffect, useState } from 'react'
 import { Request } from '../../models/request.model'
 import { FilterDolarToBr } from '../../utils/FilterDolarToBr'
-import { CardRequest, DataContainer, LittleLabel, Data, Range, ListSnacks, LittleLabelBolder, StyledSelect, Actions, Delete, Edit, Note, ConfirmDelete } from './styles'
+import { CardRequest, DataContainer, LittleLabel, Data, Range, ListSnacks, LittleLabelBolder, StyledSelect, Actions, Delete, Edit, Note, ConfirmDelete, NotePopUp, NoteDescription } from './styles'
 import { CgTrash } from "react-icons/cg"
 import { HiOutlinePencil } from "react-icons/hi"
 import { BsExclamationLg } from 'react-icons/bs'
 import { api } from '../../config/api'
 import { useNavigate } from 'react-router-dom'
+import Popup from 'reactjs-popup';
+import { MdNotes } from 'react-icons/md'
 
 type Props = {
     request: Request;
@@ -23,11 +25,11 @@ export const RequestCard = ({ request, requests, setRequests }: Props) => {
     const navigate = useNavigate()
 
     const verifyColor = () => {
-        if (request.status === "canceled") {
+        if (status === "canceled") {
             return "#d92323"
-        } else if (request.status === "complete") {
+        } else if (status === "complete") {
             return "#23d938"
-        } else if (request.status === "waiting") {
+        } else if (status === "waiting") {
             return "#2369d9"
         } else {
             return "yellow"
@@ -36,7 +38,6 @@ export const RequestCard = ({ request, requests, setRequests }: Props) => {
 
     const handleChange = (event: SelectChangeEvent) => {
         setStatus(event.target.value);
-        console.log(event.target.value)
     };
 
     useEffect(() => {
@@ -56,14 +57,44 @@ export const RequestCard = ({ request, requests, setRequests }: Props) => {
                 Authorization: `Bearer ${token}`,
             },
         })
-        .then(() => {
-            setRequests(requests.filter((requestFilter) => requestFilter.id !== request.id))
-        })
+            .then(() => {
+                setRequests(requests.filter((requestFilter) => requestFilter.id !== request.id))
+            })
     }
+
+    const editStatus = () => {
+        api.put(`/requests/${request.id}`, {
+            name: request.name,
+            price: request.price,
+            status: status,
+            note: request.note ? request.note : "",
+            requestItems: request.requestItems.map((snack) => {
+                return {
+                    amount: snack.amount,
+                    name: snack.name,
+                    price: snack.price
+                }
+            })
+        }, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((res) => {})
+    }
+
+    useEffect(() => {
+        editStatus()
+    }, [status])
+
+    useEffect(() => {
+        setStatus(request.status)
+    }, [])
 
     return (
         <CardRequest>
-            <DataContainer style={{ width: "20%" }}>
+            <DataContainer>
                 <LittleLabel color='#1F1F1F'>
                     Cliente:
                 </LittleLabel>
@@ -72,7 +103,7 @@ export const RequestCard = ({ request, requests, setRequests }: Props) => {
                 </Data>
             </DataContainer>
 
-            <DataContainer style={{ width: "20%", height: "100%" }}>
+            <DataContainer style={{ height: "100%" }}>
                 <LittleLabel color='#1F1F1F'>
                     Item(s):
                 </LittleLabel>
@@ -85,7 +116,7 @@ export const RequestCard = ({ request, requests, setRequests }: Props) => {
                 </ListSnacks>
             </DataContainer>
 
-            <DataContainer style={{ width: "20%" }}>
+            <DataContainer>
                 <LittleLabel color='#1F1F1F'>
                     Total:
                 </LittleLabel>
@@ -94,7 +125,7 @@ export const RequestCard = ({ request, requests, setRequests }: Props) => {
                 </Data>
             </DataContainer>
 
-            <DataContainer style={{ width: "20%" }}>
+            <DataContainer>
                 <LittleLabel color='#1F1F1F'>
                     Status:
                 </LittleLabel>
@@ -110,8 +141,20 @@ export const RequestCard = ({ request, requests, setRequests }: Props) => {
                 </StyledSelect>
             </DataContainer>
 
-            <DataContainer style={{ width: "20%" }}>
+            <DataContainer>
                 <Actions>
+                    {
+                        request.note &&
+                        <Popup contentStyle={{ padding: "0" }} trigger={<Note>
+                            <MdNotes fontSize={20} color="white" />
+                        </Note>} position="bottom center">
+                            <NotePopUp>
+                                <NoteDescription>
+                                    {request.note}
+                                </NoteDescription>
+                            </NotePopUp>
+                        </Popup>
+                    }
                     <Edit onClick={() => navigate(`/edit-request/${request.id}`)}>
                         <HiOutlinePencil fontSize={20} color="white" />
                     </Edit>
@@ -124,9 +167,6 @@ export const RequestCard = ({ request, requests, setRequests }: Props) => {
                             <CgTrash fontSize={20} color="white" />
                         </Delete>
                     }
-                    {/* <Note>
-                        <MdNotes fontSize={20} color="white" />
-                    </Note> */}
                 </Actions>
             </DataContainer>
             <Range color={verifyColor()} />

@@ -17,7 +17,7 @@ export const Requests = () => {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
+  const getAllRequests = () => {
     api.get("/requests", {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -27,7 +27,29 @@ export const Requests = () => {
       .then((res) => {
         setRequests(res.data)
       })
+  }
+
+  useEffect(() => {
+    getAllRequests()
   }, [])
+
+  const searchRequest = () => {
+    if (search.trim()) {
+      api.get(`/requests?search=${search.toLowerCase()}`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => setRequests(res.data))
+    } else {
+      getAllRequests()
+    }
+
+  }
+
+  useEffect(() => {
+    searchRequest()
+  }, [search])
 
   return (
     <RequestsContainer>

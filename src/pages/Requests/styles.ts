@@ -9,7 +9,6 @@ export const RequestsContainer = Styled.section`
     width: 100vw;
     display: flex;
     justify-content: center;
-    flex
 `
 
 export const MainContainer = Styled.div`

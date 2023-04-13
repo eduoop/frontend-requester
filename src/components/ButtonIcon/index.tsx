@@ -7,16 +7,17 @@ import { ButtonDisabled, ButtonAble } from './styles';
 type Props = {
   text?: string;
   IconRight: IconType;
-  onClick: () => void;
+  onClick?: () => void;
+  type?: "button" | "reset" | "submit";
 }
 
-export const ButtonIcon = ({text = 'Entrar', IconRight, onClick }: Props) => {
+export const ButtonIcon = ({text = 'Entrar', IconRight, onClick, type }: Props) => {
 
   const { height, width } = useWindowDimensions();
 
   return (
     <>
-      <ButtonAble onClick={onClick}>
+      <ButtonAble onClick={onClick} type={type ? type : "button"}>
         {width > 600 ? text : ""}  <IconRight fontSize={25}/>
       </ButtonAble>
     </>
